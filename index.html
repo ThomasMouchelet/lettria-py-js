@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <form action="">
+        <textarea name="text" id="text" cols="30" rows="10"></textarea>
+        <input type="submit">
+    </form>
+
+    <h2>Emotions List</h2>
+    <div id="emotions"></div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js"></script>
+    <script>
+        const exempleTxt = `
+            enfant qui jouait le voilà maigre et courbé
+
+            L’enfant qui pleurait le voilà les yeux brûlés
+
+            L’enfant qui dansait une ronde le voilà qui court après
+        `
+        const textHTML = document.getElementById('text')
+        textHTML.innerHTML = exempleTxt
+
+        document.querySelector('form').addEventListener('submit', function (e) {
+            e.preventDefault()
+
+            const text = document.getElementById('text').value
+
+            axios.post("http://127.0.0.1:5000/api/post",{
+                method: 'post',
+                url: 'url',
+                data: {text:text}
+            })
+            .then(function (reponse) {
+                console.log(reponse);
+                let emotionsHTML = document.getElementById('emotions')
+                let emotions = reponse.data.emotion.elements
+                emotions.map(emotion => {
+                    emotionsHTML.append(emotion.type)
+                })
+            })
+            .catch(function (erreur) {
+                console.log(erreur);
+            });
+        })
+    </script>
+</body>
+</html>
